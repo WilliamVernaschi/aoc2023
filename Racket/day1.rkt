@@ -2,7 +2,7 @@
 
 (require test-engine/racket-tests)
 
-(define INPUT-FILE-PATH "../inputs/day1.txt")
+(define INPUT-FILE-PATH "../inputs/day1.input")
 (define input-string-list (file->lines INPUT-FILE-PATH))
 
 (define lookup (hash 

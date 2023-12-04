@@ -2,7 +2,7 @@
 
 (require test-engine/racket-tests)
 
-(define INPUT-FILE-PATH "../inputs/day3.txt")
+(define INPUT-FILE-PATH "../inputs/day3.input")
 
 (define (file->grid input)
   (list->vector (map (lambda (string) (list->vector (string->list string))) (file->lines input))))

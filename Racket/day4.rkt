@@ -10,7 +10,7 @@
   data/monad
   data/applicative)
 
-(define INPUT-FILE-PATH "../inputs/day4.txt")
+(define INPUT-FILE-PATH "../inputs/day4.input")
 (define (input->lines input)
   (file->lines input))
 
@@ -80,7 +80,7 @@
 (test)
   
 
-;; returns x**y, however, if y is not positive, returns 0
+;; returns x**y, however, if y is negative, returns 0
 (define (expt-integer x y)
   (if (< y 0)
     0
@@ -93,7 +93,7 @@
 
 
 ;; solves part 2 in O(n* O(count-winning))
-;; there is a fancy name for this technique, but i can't recall it
+;; https://codeforces.com/blog/entry/78762
 (define (part2 input)
   
   (define (make-initial-vector n)

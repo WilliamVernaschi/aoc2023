@@ -11,7 +11,7 @@
   data/monad
   data/applicative)
 
-(define INPUT-FILE-PATH "../inputs/day2.txt")
+(define INPUT-FILE-PATH "../inputs/day2.input")
 (define input-string-list (file->lines INPUT-FILE-PATH))
 
 

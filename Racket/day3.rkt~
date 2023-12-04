@@ -1,0 +1,44 @@
+#lang racket 
+
+(require test-engine/racket-tests)
+
+(define INPUT-FILE-PATH "../inputs/day1.txt")
+(define grid (list->vector (file->lines INPUT-FILE-PATH)))
+(map (lambda (str) (list->vector (string->list str))) grid)
+
+(struct Number (numeric-value postion-indexes))
+(struct Position (row column))
+
+
+(define (get-at-position matrix position)
+  (vector-ref (vector-ref matrix Position-row) Position-column))
+
+
+(define dx-dy (list (Position 1 0) (Position 1 1) (Position 1 -1)
+                    (Position -1 0) (Position -1 1) (Position -1 -1)
+                    (Position 0 1) (Position 0 -1)))
+
+(define (add-position p1 p2)
+  (Position (+ (Position-row p1) (Position-row p2))
+            (+ (Position-column p1) (Position-column p2))))
+
+(define (is-symbol? char)
+  (and (not (char-numeric? char)) (not (equal? #\. char))) )
+
+(define (adjacent-numbers position)
+  (for*/set 
+        ([position (number-position-indexes number)]
+        [offset dx-dy]
+        #:when (and 
+                 (valid-position? (add-position offset position))
+                 (digit? (get-at-position grid (add-position offset position)))))
+    (get-numer-at grid (add-position offset position))))
+     
+
+(define (solve1 grid)
+  (for*/set 
+    ([row (in-range 0 (length grid))]
+     [col (in-range 0 (length (list-ref grid 0)))]
+     #:when (is-symbol? (get-at-position grid (Position row col))))
+    (adjacent-numbers
+

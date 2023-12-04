@@ -23,9 +23,9 @@
 (struct Game (id sacks) #:transparent)
 
 ; ===== BEGIN PARSING ======
+
 ;; given a list of pairs representing an item on a sack, returns
 ;; a sack, check the examples.
-
 (define (parsed-sack->sack lst)
   (define (find-color lst color)
     (cond

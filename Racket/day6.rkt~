@@ -1,0 +1,49 @@
+#lang racket
+
+(require test-engine/racket-tests)
+
+;; once again I chose to use megaparsack
+;; to do the parsing.
+(require 
+  megaparsack
+  megaparsack/text
+  data/monad
+  data/applicative)
+
+(struct Race (time dis))
+
+(define (times-distances->races times distances)
+  (cond
+    [(empty? times) empty]
+    [else (cons (Race (first times) (first distances) ) (times-distances->races (rest times) (rest distances)))]))
+  
+(define input/p
+  (do
+    (string/p "Time:")
+    (many+/p space/p)
+    [times <- (many+/p integer/p #:sep (many+/p (char/p #\ )))]
+    (string/p "\n")
+    (string/p "Distance:")
+    (many+/p space/p)
+    [distances <- (many+/p integer/p #:sep (many+/p (char/p #\ )))]
+    (pure (times-distances->races times distances))))
+
+(define (parse-input file) (parse-result! (parse-string input/p (file->string file)))) 
+
+(define (get-num-wins race)
+  (let ([discriminant (sqrt (+ (sqr (Race-time race)) (* 4 Race-dis race)) )])
+    (add1 (- (ceiling (/ (+ (Race-time race) discriminant) 2))  (floor (/ (- (Race-time race) discriminant) 2))))))
+
+(define (part1 file)
+  (define (solve-part1 races)
+    (cond 
+      [(empty? races) 1]
+      [else (* (get-num-wins (first races)) (part1 (rest races)))]))
+
+  (solve-part1 (parse-input file)))
+
+(define (part2 file)
+  (get-num-wins (Race 48938595 296192812361391)))
+
+    
+  (part1 "../inputs/day6.example")

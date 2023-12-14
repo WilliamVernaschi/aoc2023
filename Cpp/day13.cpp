@@ -11,25 +11,13 @@ bool is_power_of_2(int n){
 
 int reflection_misses(int idx, const vector<int> &gd){
   int l = idx, r = idx+1;
-  bool missed = false;
-  int ans = 0;
+  int misses = 0;
 
-  while(true){
-
-    if(gd[l] != gd[r] && !missed){
-      if(!is_power_of_2(gd[l]^gd[r])) return 3;
-
-      missed = true;
-      ans += abs(gd[l] - gd[r]);
-    }
-    else if(gd[l] != gd[r] && missed){
-      return 3; // a number that is neither 0 or a power of 2
-    }
-
+  while(l >= 0 && r < (int)gd.size()){
+    misses += __builtin_popcount(gd[l]^gd[r]);
     l--, r++;
-    if(l == -1 || r == (int)gd.size()) return ans;
   }
-  return 3; 
+  return misses;
 };
 
 grid transpose(const grid &gd){
@@ -100,13 +88,13 @@ int main(){
     int modified_horizontal = 0, modified_vertical = 0;
 
     for(int i = 0; i < (int)horizontal_hash.size()-1; i++){
-      if(is_power_of_2(reflection_misses(i, horizontal_hash))){
+      if(reflection_misses(i, horizontal_hash) == 1){
         modified_horizontal = (i+1);
         break;
       }
     }
     for(int i = 0; i < (int)vertical_hash.size()-1; i++){
-      if(is_power_of_2(reflection_misses(i, vertical_hash))){
+      if(reflection_misses(i, vertical_hash) == 1){
         modified_vertical = (i+1);
         break;
       }

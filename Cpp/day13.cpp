@@ -5,10 +5,6 @@ using namespace std;
 
 using grid = vector<string>;
 
-bool is_power_of_2(int n){
-  return __builtin_popcount(n) == 1;
-};
-
 int reflection_misses(int idx, const vector<int> &gd){
   int l = idx, r = idx+1;
   int misses = 0;

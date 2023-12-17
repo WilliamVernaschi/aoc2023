@@ -4,6 +4,8 @@ using namespace std;
 
 enum Direction{U, D, L, R};
 
+
+
 struct Node{
   Direction came_from;
   int row, col;
@@ -24,8 +26,11 @@ struct NodeHash {
   }
 };
 
+using Graph = unordered_map<Node, vector<pair<Node, int>>, NodeHash>;
+
 
 int main(){
+  ios_base::sync_with_stdio(false);cin.tie(NULL);
 
   vector<string> mp;
 
@@ -137,7 +142,36 @@ int main(){
         dist[Node(D, n-1, m-1)]});
   };
 
+  // dial's algorithm
+  // https://codeforces.com/blog/entry/88408
+  auto dials = [&](int si, int sj, Graph graph) {
+    int lim = 80;
 
-  cout << "Part 1: " << dijkstra(0, 0, build_graph(1, 3)) << '\n';
-  cout << "Part 2: " << dijkstra(0, 0, build_graph(4, 10)) << '\n';
+    vector<vector<Node>> qs(lim);
+    unordered_map<Node, int, NodeHash> dist;
+
+
+    dist[Node(L, si, sj)] = 0; qs[0].push_back(Node(L, si, sj));
+    dist[Node(U, si, sj)] = 0; qs[0].push_back(Node(U, si, sj));
+
+    for (int d = 0, maxd = 0; d <= maxd; ++d) {
+      for (auto& q = qs[d % lim]; q.size(); ) {
+        auto node = q.back(); q.pop_back();
+        if (!dist.count(node) || dist[node] != d ) continue;
+        for (auto &[vec, cost] : graph[node]) {
+          if (dist.count(vec) && dist[vec] <= d + cost) continue;
+          dist[vec] = d + cost;
+          qs[(d + cost) % lim].push_back(vec);
+          maxd = max(maxd, d + cost);
+        }
+      }
+    }
+    return min({
+        dist[Node(R, n-1, m-1)],
+        dist[Node(D, n-1, m-1)]});
+  };
+
+
+  cout << "Part 1: " << dials(0, 0, build_graph(1, 3)) << '\n';
+  cout << "Part 2: " << dials(0, 0, build_graph(4, 10)) << '\n';
 }
